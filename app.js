@@ -10,6 +10,7 @@ dotenv.config({path: './config/config.env'});
 connectDB();
 
 const apiRouter   = require('./routes/api');
+const googleRouter = require('./routes/google')
 
 const app = express();
 
@@ -19,6 +20,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+
+app.use('/',googleRouter)
 app.use('/api',apiRouter);
 
 module.exports = app;

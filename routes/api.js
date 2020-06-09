@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
+const checkAuthToken = require('../middleware/auth');
 
 const User = require('../models/User');
 
@@ -40,9 +41,23 @@ router.post( '/login',
             .json({ errors: [{ msg: 'Invalid Credentials' }] });
         }
   
+        //Everything is fine, the user can log in
+        const payload = {
+          user: {
+            id: user._id
+          }
+        }
 
+        jwt.sign(payload,process.env.JWTSECRET,{ expiresIn: 360000 }, (err,token) =>{
+          if(err){
+            res.status(500).send({error: true, msg: err.message})
+          }
 
-        res.status(200).send({error: false, msg:'User logged in'})
+          res.status(200).send({error: false, msg:'User logged in', token})
+
+        })
+
+        
 
       } catch (err) {
         console.error(err.message);
@@ -92,9 +107,24 @@ router.post( '/registration',
   
         user.password = await bcrypt.hash(password, salt);
   
-        await user.save();
+        let saved_user = await user.save();
+
+        const payload = {
+            user:{
+              id: saved_user._id
+            }
+        }
+
+        jwt.sign(payload,process.env.JWTSECRET, {expiresIn: 360000},(err, token)=>{
+          if(err){
+            res.status(500).send({error: true, msg: err.message})
+          }
+
+          res.status(200).send({error: false, msg:'User registered', token})
+
+        })
   
-        res.status(200).send({error: false, msg:'User registered'})
+        
 
       } catch (err) {
         console.error(err.message);
@@ -102,6 +132,31 @@ router.post( '/registration',
       }
     }
 );
+
+
+router.get('/info',checkAuthToken, async (req, res) => {
+
+  try {
+    
+    const info = await User.findById(req.user.id);
+
+    if(!info){
+
+      res.status(400).send({error: true, msg: 'Error obtaining information from user'})
+
+    }
+
+    res.status(200).send({error: false,  msg: 'User found', name: info.name})
+
+  } catch (error) {
+
+    res.status(500).send({error: true, msg: error.message})
+    
+  }
+
+
+})
+
 
 
 module.exports = router;

@@ -1,7 +1,22 @@
 import React, { Component } from 'react'
 import Navbar from './Navbar';
+import authToken from '../utils/authToken';
 
 export default class Home extends Component {
+
+    componentDidMount = () => {
+        
+        let token = localStorage.getItem('token')
+
+        if(token){
+            authToken(token)
+            this.props.history.push('/dashboard')
+        }
+
+    }
+    
+
+
     render() {
         return (
 
@@ -19,6 +34,7 @@ export default class Home extends Component {
             </div>
 
             </div>
+            
             </>
         )
     }

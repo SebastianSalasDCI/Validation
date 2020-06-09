@@ -10,6 +10,15 @@ export default class Navbar extends Component {
              isLoggedIn: false
         }
     }
+
+    componentDidMount = () => {
+        
+        if(localStorage.getItem('token')){
+            this.setState({isLoggedIn: true})
+        }
+
+    }
+    
     
 
     handleLinks = () =>{
