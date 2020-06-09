@@ -103,23 +103,6 @@ router.post( '/registration',
     }
 );
 
-router.get('/me', auth, async (req, res) => {
-    try {
-
-      const info = await User.findById(req.user.id);
-  
-      if (!info) {
-        return res.status(400).json({ msg: 'Error obtaining user info' });
-      }
-  
-      res.json(info.name);
-
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send({error: true, msg:err.message});
-    }
-  });
-  
 
 module.exports = router;
 
