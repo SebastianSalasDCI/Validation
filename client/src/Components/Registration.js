@@ -44,7 +44,7 @@ export default class Registration extends Component {
                         <MDBInput name="password" onChange={this.handleInputs} label="Your password" icon="lock" group type="password" validate />
                         </div>
                         <div className="text-center">
-                        <MDBBtn color="primary">Register</MDBBtn>
+                        <MDBBtn color="primary" type="submit">Register</MDBBtn>
                         </div>
                     </form>
                     </MDBCol>

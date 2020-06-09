@@ -44,7 +44,7 @@ export default class Login extends Component {
                     <MDBInput name="password" onChange={this.handleInputs} label="Type your password" icon="lock" group type="password" validate />
                     </div>
                     <div className="text-center">
-                    <MDBBtn color="primary" >Login</MDBBtn>
+                    <MDBBtn color="primary" type="submit">Login</MDBBtn>
                     </div>
                 </form>
                 </MDBCol>
